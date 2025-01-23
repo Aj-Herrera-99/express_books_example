@@ -16,47 +16,47 @@ const show = (req, res) => {
     const id = req.params.id;
     // prepariamo la query per il post
     const booksSql = ` 
-        SELECT posts.* FROM posts 
+        SELECT books.* FROM books 
         WHERE id = ? 
     `;
     // prepariamo la query per i tags del post con join 
-    const tagsSql = `
-        SELECT tags.* FROM tags 
-        JOIN post_tag ON tags.id = post_tag.tag_id
-        JOIN posts ON post_tag.post_id = posts.id
-        WHERE posts.id = ?
+    const reviewsSql = `
+        SELECT reviews.* FROM reviews 
+        JOIN post_tag ON reviews.id = post_tag.tag_id
+        JOIN books ON post_tag.post_id = books.id
+        WHERE books.id = ?
     `;
     // eseguiamo la prima query per il post
     connection.query(booksSql
-, [id], (err, pizzaResults) => {
+, [id], (err, bookResults) => {
         if (err)
             return res.status(500).json({ error: "Database query failed" });
-        if (pizzaResults.length === 0)
+        if (bookResults.length === 0)
             return res.status(404).json({ error: "post not found" });
 
         // recuperiamo il post
-        const post = pizzaResults[0];
+        const post = bookResults[0];
 
         // se è andata bene, eseguaimo la seconda query per i tags
-        connection.query(tagsSql, [id], (err, tagsResults) => {
+        connection.query(reviewsSql, [id], (err, reviewsResults) => {
             if (err)
                 return res.status(500).json({ error: "Database query failed" });
             // aggiungiamo i tags del post
-            post.tags = tagsResults;
+            post.tags = reviewsResults;
             res.json(post);
         });
     });
 };
 
-// const destroy = (req, res) => {
-//     // recuperiamo l'id dall' URL
-//     const { id } = req.params;
-//     //Eliminiamo il post dal blog
-//     connection.query("DELETE FROM posts WHERE id = ?", [id], (err) => {
-//         if (err)
-//             return res.status(500).json({ error: "Failed to delete post" });
-//         res.sendStatus(204);
-//     });
-// };
+const destroy = (req, res) => {
+    // // recuperiamo l'id dall' URL
+    // const { id } = req.params;
+    // //Eliminiamo il post dal blog
+    // connection.query("DELETE FROM posts WHERE id = ?", [id], (err) => {
+    //     if (err)
+    //         return res.status(500).json({ error: "Failed to delete post" });
+    //     res.sendStatus(204);
+    // });
+};
 
 module.exports = { index, destroy, show };
