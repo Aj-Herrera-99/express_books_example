@@ -40,7 +40,7 @@ const show = (req, res) => {
             if (err)
                 return res.status(500).json({ error: "Database query failed" });
             // aggiungiamo le recensioni del book
-            book.tags = reviewsResults;
+            book.reviews = reviewsResults;
             res.json(book);
         });
     });
