@@ -22,9 +22,7 @@ const show = (req, res) => {
     // prepariamo la query per i tags del post con join 
     const reviewsSql = `
         SELECT reviews.* FROM reviews 
-        JOIN post_tag ON reviews.id = post_tag.tag_id
-        JOIN books ON post_tag.post_id = books.id
-        WHERE books.id = ?
+        WHERE book_id = ?
     `;
     // eseguiamo la prima query per il post
     connection.query(booksSql
