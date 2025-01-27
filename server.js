@@ -16,7 +16,7 @@ app.use(express.static("public"));
 app.use(corsPolicy);
 
 app.get("/", (req, res) => {
-    res.send("Home Page");
+  res.send("Home Page");
 });
 
 app.use("/books", booksRouter);
@@ -27,5 +27,5 @@ app.use(notFound);
 
 //server must listen on your host and your port
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
