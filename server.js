@@ -11,6 +11,9 @@ const notFound = require("./middlewares/notFound");
 const corsPolicy = require("./middlewares/corsPolicy");
 const booksRouter = require("./routers/booksRouter");
 
+//parse JSON request bodies
+app.use(express.json());
+
 app.use(express.static("public"));
 
 app.use(corsPolicy);
@@ -29,3 +32,5 @@ app.use(notFound);
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+
