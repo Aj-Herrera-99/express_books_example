@@ -5,27 +5,29 @@ const app = express();
 // set costant to port
 const port = process?.env.PORT || 3000;
 
-//Other imports
+// Other imports
 const errorsHandler = require("./middlewares/errorsHandles");
 const notFound = require("./middlewares/notFound");
 const corsPolicy = require("./middlewares/corsPolicy");
 const booksRouter = require("./routers/booksRouter");
+const usersRouter = require("./routers/usersRouter");
 
-//parse JSON request bodies
+// global middlewares
 app.use(express.json());
-
 app.use(express.static("public"));
-
 app.use(corsPolicy);
 
+// homepage
 app.get("/", (req, res) => {
   res.send("Home Page");
 });
 
+// routers
+app.use("/users", usersRouter);
 app.use("/books", booksRouter);
 
+// fallback
 app.use(errorsHandler);
-
 app.use(notFound);
 
 //server must listen on your host and your port
