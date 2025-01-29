@@ -5,12 +5,13 @@ const index = (req, res) => {
     console.log(page);
     // prepariamo la query
     let sql = "SELECT * FROM books LIMIT 6";
+    let offset;
     if (page) {
-        const offset = (page - 1) * 6;
-        sql = `SELECT * FROM books LIMIT 6 OFFSET ${offset}`;
+        offset = (page - 1) * 6;
+        sql = `SELECT * FROM books LIMIT 6 OFFSET ?`;
     }
     // eseguiamo la query
-    connection.query(sql, (err, results) => {
+    connection.query(sql, [offset], (err, results) => {
         if (err)
             return res.status(500).json({ error: "Database query failed" });
         res.json(results);
