@@ -98,7 +98,7 @@ router.post("/refresh", (req, res) => {
 // functions
 function generateAccessToken(user) {
     return jwt.sign({ id: user.id, isAdmin: user.isAdmin }, "mySecretKey", {
-        expiresIn: "1h",
+        expiresIn: "15m",
     });
 }
 function generateRefreshToken(user) {
