@@ -1,20 +1,27 @@
+const { query } = require("express");
 const connection = require("../data/db");
 
 const index = (req, res) => {
     const { page } = req.query;
     console.log(page);
     // prepariamo la query
-    let sql = "SELECT * FROM books LIMIT 6";
+    let booksSql = "SELECT * FROM books LIMIT 6";
     let offset;
     if (page) {
         offset = (page - 1) * 6;
-        sql = `SELECT * FROM books LIMIT 6 OFFSET ?`;
+        booksSql = `SELECT * FROM books LIMIT 6 OFFSET ?`;
     }
     // eseguiamo la query
-    connection.query(sql, [offset], (err, results) => {
+    connection.query(booksSql, [offset], (err, results) => {
         if (err)
             return res.status(500).json({ error: "Database query failed" });
-        res.json(results);
+        let booksCountSql = `SELECT COUNT(id) as "total_books" FROM books`;
+        connection.query(booksCountSql, (err, countResult) => {
+            if (err)
+                return res.status(500).json({ error: "Database query failed" });
+            const total_books = countResult[0].total_books;
+            res.json({ total_books, books: results});
+        });
     });
 };
 
@@ -111,7 +118,5 @@ const destroyReviews = (req, res) => {
             : res.json({ success: true, message: "Review eliminata" }); // mettere come sendStatus(204)
     });
 };
-
-
 
 module.exports = { index, show, store, storeReviews, destroyReviews, destroy };
