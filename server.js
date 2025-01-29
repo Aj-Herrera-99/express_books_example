@@ -6,20 +6,20 @@ const app = express();
 const port = process?.env.PORT || 3000;
 
 // Other imports
+const cors = require("cors");
 const errorsHandler = require("./middlewares/errorsHandles");
 const notFound = require("./middlewares/notFound");
-const corsPolicy = require("./middlewares/corsPolicy");
 const booksRouter = require("./routers/booksRouter");
 const usersRouter = require("./routers/usersRouter");
 
 // global middlewares
 app.use(express.json());
 app.use(express.static("public"));
-app.use(corsPolicy);
+app.use(cors());
 
 // homepage
 app.get("/", (req, res) => {
-  res.send("Home Page");
+    res.send("Home Page");
 });
 
 // routers
@@ -32,7 +32,5 @@ app.use(notFound);
 
 //server must listen on your host and your port
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server is running on http://localhost:${port}`);
 });
-
-
